@@ -2,7 +2,7 @@ import {Component} from 'react'
 import {Link} from 'react-router-dom'
 import Header from '../Header'
 import Footer from '../Footer'
-
+import SmallNavCont from '../SmallNavCont'
 import ReactSlick from '../ReactSlick'
 import HeaderContext from '../../HeaderContext/HeaderContext'
 import './index.css'
@@ -12,7 +12,7 @@ class Home extends Component {
     return (
       <HeaderContext.Consumer>
         {value => {
-          const {theme} = value
+          const {theme, showNavCont} = value
 
           const homeCont = theme ? 'dark-home' : ''
           const heading = theme ? 'h1-dark' : ''
@@ -20,6 +20,7 @@ class Home extends Component {
           return (
             <>
               <Header />
+              {showNavCont ? <SmallNavCont /> : ''}
               <div className={`home-cont ${homeCont}`}>
                 <h1 className={`home-heading ${heading}`}>
                   Find Your Next Favorite Books?

@@ -3,12 +3,13 @@ import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
 
 import {BsFillStarFill} from 'react-icons/bs'
-import {AiFillHeart} from 'react-icons/ai'
+
 import HeaderContext from '../../HeaderContext/HeaderContext'
 import Header from '../Header'
 import Footer from '../Footer'
 
 import './index.css'
+import SmallNavCont from '../SmallNavCont'
 
 class BookItemDetails extends Component {
   state = {bookData: {}, dataStatus: 'loading'}
@@ -67,21 +68,12 @@ class BookItemDetails extends Component {
     return (
       <HeaderContext.Consumer>
         {value => {
-          const {theme, onClickFavIcon} = value
-
-          const {match} = this.props
-          const {params} = match
-          const bookId = params.id
+          const {theme} = value
 
           const homeCont = theme ? 'dark-home' : ''
           const heading = theme ? 'h1-dark' : ''
           const innerCont = theme ? 'slick-dark' : ''
           const para = theme ? 'p-dark' : ''
-
-          const onClickFavBtn = () => {
-            onClickFavIcon(bookId)
-            console.log(bookId)
-          }
 
           return (
             <>
@@ -109,13 +101,6 @@ class BookItemDetails extends Component {
                         Status:{' '}
                         <span className="status-text">{readStatus}</span>
                       </p>
-                      <button
-                        type="button"
-                        className="add-to-fav"
-                        onClick={onClickFavBtn}
-                      >
-                        Add to Favourites <AiFillHeart color="red" />
-                      </button>
                     </div>
                   </div>
                   <hr className="book-item-line" />
@@ -125,6 +110,50 @@ class BookItemDetails extends Component {
                     <h1 className={`item-heading ${heading}`}>About Book</h1>
                     <p className={`item-desc ${para}`}>{aboutBook}</p>
                   </div>
+                </div>
+              </div>
+              {/*  small device output */}
+
+              <div className={`small-book-item-details-cont ${homeCont}`}>
+                <div className={`small-book-details-items-cont ${homeCont}`}>
+                  <img
+                    src={coverPic}
+                    alt={title}
+                    className="small-book-image"
+                  />
+                  <div className={`small-books-content-cont ${homeCont}`}>
+                    <h1 className={`small-shelf-book-title ${para}`}>
+                      {title}
+                    </h1>
+                    <p className={`small-shelf-author-name ${para}`}>
+                      {authorName}
+                    </p>
+                    <div className="small-rating-cont">
+                      <p className={`small-shelf-book-rating ${para}`}>
+                        Avg Rating
+                      </p>
+                      <BsFillStarFill
+                        color="#FBBF24"
+                        size={15}
+                        className="small-star-icon"
+                      />
+                      <p className={`small-rating ${para}`}> {rating}</p>
+                    </div>
+                    <p className={`small-shelf-book-status ${para}`}>
+                      Status: <span className="status-text">{readStatus}</span>
+                    </p>
+                  </div>
+                </div>
+                <hr className="small-line" />
+                <div>
+                  <h1 className={`small-item-heading ${heading}`}>
+                    About Author
+                  </h1>
+                  <p className={`small-item-desc ${para}`}>{aboutAuthor}</p>
+                  <h1 className={`small-item-heading ${heading}`}>
+                    About Book
+                  </h1>
+                  <p className={`small-item-desc ${para}`}>{aboutBook}</p>
                 </div>
               </div>
             </>
@@ -173,14 +202,22 @@ class BookItemDetails extends Component {
 
   render() {
     return (
-      <>
-        <Header />
+      <HeaderContext.Consumer>
+        {value => {
+          const {showNavCont} = value
 
-        <div className="blog-container">
-          {this.getDataOnTheBasicsOfStatus()}
-          <Footer />
-        </div>
-      </>
+          return (
+            <>
+              <Header />
+              {showNavCont ? <SmallNavCont /> : ''}
+              <div className="blog-container">
+                {this.getDataOnTheBasicsOfStatus()}
+                <Footer />
+              </div>
+            </>
+          )
+        }}
+      </HeaderContext.Consumer>
     )
   }
 }

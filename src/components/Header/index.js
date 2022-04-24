@@ -1,7 +1,8 @@
 import {Component} from 'react'
 import {Link, withRouter} from 'react-router-dom'
 import Cookies from 'js-cookie'
-import {FaBars} from 'react-icons/fa'
+import {FaMoon, FaBars} from 'react-icons/fa'
+import {BsSun} from 'react-icons/bs'
 
 import './index.css'
 import HeaderContext from '../../HeaderContext/HeaderContext'
@@ -16,7 +17,8 @@ class Header extends Component {
             onClickBookShelves,
             onClickHome,
             theme,
-
+            onClickThemeChanger,
+            oncClickFavouriteLink,
             onClickNavIcon,
           } = value
 
@@ -36,6 +38,13 @@ class Header extends Component {
 
           const onClickShelf = () => {
             onClickBookShelves()
+          }
+
+          const themeChanger = () => {
+            onClickThemeChanger()
+          }
+          const onClickFavourite = () => {
+            oncClickFavouriteLink()
           }
 
           const headerCont = theme ? 'dark' : ''
@@ -65,6 +74,20 @@ class Header extends Component {
 
               <ul className="nav-links-cont">
                 <li className="nav-links">
+                  <button
+                    type="button"
+                    onClick={themeChanger}
+                    className="theme-btn"
+                  >
+                    {theme ? (
+                      <BsSun color="#ffffff" size={20} />
+                    ) : (
+                      <FaMoon size={20} />
+                    )}
+                  </button>
+                </li>
+
+                <li className="nav-links">
                   <Link
                     to="/"
                     className={
@@ -88,7 +111,19 @@ class Header extends Component {
                     <p>Bookshelves</p>
                   </Link>
                 </li>
-
+                <li className="nav-links">
+                  <Link
+                    to="/fav"
+                    className={
+                      activeLink === 'favourite'
+                        ? 'nav-links active'
+                        : 'nav-links'
+                    }
+                    onClick={onClickFavourite}
+                  >
+                    <p>Favourite</p>
+                  </Link>
+                </li>
                 <li>
                   <button
                     type="button"

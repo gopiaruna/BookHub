@@ -5,7 +5,7 @@ import {BsSearch} from 'react-icons/bs'
 import Footer from '../Footer'
 import ShelfItem from '../ShelfItem'
 import BookItem from '../BookItem'
-
+import SmallNavCont from '../SmallNavCont'
 import Header from '../Header'
 import HeaderContext from '../../HeaderContext/HeaderContext'
 import './index.css'
@@ -185,14 +185,14 @@ class BookShelves extends Component {
     return (
       <HeaderContext.Consumer>
         {value => {
-          const {theme} = value
+          const {theme, showNavCont} = value
           const homeCont = theme ? 'dark-home' : ''
           const heading = theme ? 'h1-dark' : ''
           const shelfCont = theme ? 'slick-dark' : ''
           return (
             <>
               <Header />
-
+              {showNavCont ? <SmallNavCont /> : ''}
               <div className={`shelf-cont ${homeCont}`}>
                 <div className={`book-shelves-cont ${shelfCont}`}>
                   <h1 className={`shelf-heading ${heading}`}>Bookshelves</h1>

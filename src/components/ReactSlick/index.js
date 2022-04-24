@@ -4,6 +4,7 @@ import Cookies from 'js-cookie'
 import Slider from 'react-slick'
 import Loader from 'react-loader-spinner'
 
+import HeaderContext from '../../HeaderContext/HeaderContext'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 
@@ -11,7 +12,7 @@ import './index.css'
 
 const settings = {
   dots: false,
-  infinite: false,
+  infinite: true,
   speed: 500,
   slidesToShow: 4,
   slidesToScroll: 1,
@@ -68,7 +69,7 @@ class ReactSlick extends Component {
         {
           topRatedList: formattedData,
         },
-        this.renderSlider,
+        this.getSuccessData,
       )
     } else {
       this.setState({
@@ -80,27 +81,50 @@ class ReactSlick extends Component {
   renderSlider = () => {
     const {topRatedList} = this.state
     return (
-      <Slider {...settings}>
-        {topRatedList.map(eachLogo => {
-          const {id, coverPic, title, authorName} = eachLogo
+      <HeaderContext.Consumer>
+        {value => {
+          const {theme} = value
+          const heading = theme ? 'h1-dark' : ''
+          const para = theme ? 'p-dark' : ''
           return (
-            <li key={id}>
-              <Link to={`/books/${id}`}>
-                <div className="slick-item" key={id}>
-                  <img className="logo-image" src={coverPic} alt={title} />
-                  <h1 className="book-title">{title}</h1>
-                  <p className="author-name">{authorName}</p>
-                </div>
-              </Link>
-            </li>
+            <Slider {...settings}>
+              {topRatedList.map(eachLogo => {
+                const {id, coverPic, title, authorName} = eachLogo
+                return (
+                  <li key={id}>
+                    <Link to={`/books/${id}`}>
+                      <div className="slick-item">
+                        <img
+                          className="slick-logo-image"
+                          src={coverPic}
+                          alt={title}
+                        />
+                        <h1 className={`book-title ${heading}`}>{title}</h1>
+                        <p className={`author-name ${para}`}>{authorName}</p>
+                      </div>
+                    </Link>
+                  </li>
+                )
+              })}
+            </Slider>
           )
-        })}
-      </Slider>
+        }}
+      </HeaderContext.Consumer>
     )
   }
 
   getSuccessData = () => (
-    <ul className="slick-container">{this.renderSlider()}</ul>
+    <HeaderContext.Consumer>
+      {value => {
+        const {theme} = value
+        const slickCont = theme ? 'slick-dark' : ''
+        return (
+          <ul className={`slick-container ${slickCont}`}>
+            {this.renderSlider()}
+          </ul>
+        )
+      }}
+    </HeaderContext.Consumer>
   )
 
   getLoadingSpinner = () => (
@@ -142,17 +166,31 @@ class ReactSlick extends Component {
 
   render() {
     return (
-      <div className="main-container">
-        <div className="heading-button-cont">
-          <h1 className="topRated-books-text">Top Rated Books</h1>
-          <Link to="/shelf">
-            <button type="button" className="topRated-btn">
-              Find Books
-            </button>
-          </Link>
-        </div>
-        {this.getDataBasedOnStatus()}
-      </div>
+      <HeaderContext.Consumer>
+        {value => {
+          const {theme} = value
+
+          const slickCont = theme ? 'slick-dark' : ''
+          const heading = theme ? 'h1-dark' : ''
+          return (
+            <div className={`main-container ${slickCont}`}>
+              <div className="heading-button-cont">
+                <h1 className={`topRated-books-text ${heading}`}>
+                  Top Rated Books
+                </h1>
+                <div className="find-books-slick">
+                  <Link to="/shelf">
+                    <button type="button" className="topRated-btn">
+                      Find Books
+                    </button>
+                  </Link>
+                </div>
+              </div>
+              {this.getDataBasedOnStatus()}
+            </div>
+          )
+        }}
+      </HeaderContext.Consumer>
     )
   }
 }
